@@ -1,38 +1,33 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #FFD700;
+    background-color: #f0e68c;
+    margin: 0;
+    overflow: hidden;
 }
 
 h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 48px;
+    color: #ff69b4;
 }
 
 button {
-    font-size: 1.5rem;
+    font-size: 24px;
     padding: 10px 20px;
-    background-color: #1E90FF;
+    background-color: #ff69b4;
     color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
-.confetti {
+button:hover {
+    background-color: #ff1493;
+}
+
+#confettiCanvas {
     position: absolute;
-    width: 10px;
-    height: 20px;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: 1;
-}
-
-@keyframes fall {
-    0% {
-        transform: translateY(-20px);
-    }
-    100% {
-        transform: translateY(100vh);
-    }
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
