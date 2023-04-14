@@ -1,24 +1,48 @@
-function celebrate() {
-    const confettiCount = 200;
-    const colors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff'];
+document.getElementById('celebrateBtn').addEventListener('click', function () {
+    playBirthdaySound();
+    startConfetti();
+});
 
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.left = Math.floor(Math.random() * 100) + 'vw';
-        confetti.style.top = '-20px';
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        confetti.style.animationDelay = (Math.random() * 2) + 's';
-        document.body.appendChild(confetti);
-
-        setTimeout(() => {
-            confetti.remove();
-        }, 5000);
-    }
-
-    const birthdaySound = document.getElementById('birthdaySound');
-    birthdaySound.currentTime = 0;
+function playBirthdaySound() {
+    var birthdaySound = document.getElementById('birthdaySound');
     birthdaySound.play();
 }
-document.getElementById('celebrateBtn').addEventListener('click', celebrate);
+
+function startConfetti() {
+    var confettiCanvas = document.getElementById('confettiCanvas');
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+    var ctx = confettiCanvas.getContext('2d');
+    var confettiCount = 200;
+    var confettiArray = [];
+
+    for (var i = 0; i < confettiCount; i++) {
+        confettiArray.push(new Confetti());
+    }
+
+    function Confetti() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight - window.innerHeight;
+        this.size = Math.random() * 10 + 1;
+        this.weight = Math.random() * 0.5 + 0.5;
+        this.color = 'hsl(' + Math.random() * 360 + ', 100%, 50%)';
+    }
+
+    function updateConfetti() {
+        for (var i = 0; i < confettiArray.length; i++) {
+            confettiArray[i].y += confettiArray[i].weight;
+            confettiArray[i].x += Math.sin(confettiArray[i].y * 0.01) * 10;
+
+            if (confettiArray[i].y > window.innerHeight) {
+                confettiArray[i].y = 0;
+                confettiArray[i].x = Math.random() * window.innerWidth;
+            }
+        }
+    }
+
+    function drawConfetti() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        for (var i = 0; i < confettiArray.length; i++) {
+            ctx.beginPath();
+            ctx.arc(confettiArray[i].x, confettiArray[i].y
