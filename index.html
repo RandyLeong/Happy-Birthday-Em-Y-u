@@ -10,6 +10,9 @@
             background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
             text-align: center;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
         }
 
         h1 {
@@ -18,86 +21,53 @@
             margin-top: 15%;
         }
 
-        button {
-            font-size: 1.5rem;
-            padding: 10px 20px;
-            margin-top: 30px;
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 60%;
+            margin: 0 auto;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Happy Birthday, Ngọc Hân!</h1>
-    <button id="celebrateBtn">Celebrate!</button>
-    <audio id="birthdaySound" src="birthday_sound.mp3"></audio>
+    <h2>Pop the balloons!</h2>
+    <div id="game-container"></div>
 
     <script>
-        const celebrateBtn = document.getElementById('celebrateBtn');
-        const birthdaySound = document.getElementById('birthdaySound');
+        const gameContainer = document.getElementById('game-container');
 
-        celebrateBtn.addEventListener('click', function() {
-            startConfetti();
-            birthdaySound.play();
-        });
+        for (let i = 0; i < 20; i++) {
+            createBalloon();
+        }
 
-        function startConfetti() {
-            const canvas = document.createElement('canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            document.body.appendChild(canvas);
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.backgroundColor = getRandomColor();
+            balloon.style.left = `${Math.random() * 90}vw`;
+            balloon.style.top = `${Math.random() * 90}vh`;
+            balloon.addEventListener('click', popBalloon);
+            gameContainer.appendChild(balloon);
+        }
 
-            const ctx = canvas.getContext('2d');
-            const confettiArray = [];
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 50%)`;
+        }
 
-            class Confetti {
-                constructor(x, y, size, color) {
-                    this.x = x;
-                    this.y = y;
-                    this.size = size;
-                    this.color = color;
-                    this.speed = Math.random() * 1 + 1;
-                    this.opacity = Math.random() + 0.5;
-                }
-            }
-
-            for (let i = 0; i < 100; i++) {
-                confettiArray.push(
-                    new Confetti(
-                        Math.random() * canvas.width,
-                        -Math.random() * canvas.height,
-                        Math.random() * 10 + 10,
-                        `hsla(${Math.random() * 360}, 100%, 50%, ${Math.random() * 0.5 + 0.5})`
-                    )
-                );
-            }
-
-            function updateConfetti() {
-                for (let i = 0; i < confettiArray.length; i++) {
-                    confettiArray[i].y += confettiArray[i].speed;
-                    if (confettiArray[i].y > canvas.height) {
-                        confettiArray[i].y = -confettiArray[i].size;
-                        confettiArray[i].x = Math.random() * canvas.width;
-                    }
-                }
-            }
-
-            function drawConfetti() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < confettiArray.length; i++) {
-                    ctx.beginPath();
-                    ctx.arc(confettiArray[i].x, confettiArray[i].y, confettiArray[i].size, 0, Math.PI * 2, false);
-                    ctx.fillStyle = confettiArray[i].color;
-                    ctx.fill();
-                }
-            }
-
-            function animateConfetti() {
-                updateConfetti();
-                drawConfetti();
-                requestAnimationFrame(animateConfetti);
-            }
-
-            animateConfetti();
+        function popBalloon(event) {
+            event.target.style.backgroundColor = 'transparent';
+            event.target.style.border = 'none';
+            event.target.removeEventListener('click', popBalloon);
         }
     </script>
 </body>
